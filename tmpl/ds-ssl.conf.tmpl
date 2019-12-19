@@ -1,0 +1,32 @@
+include /etc/nginx/includes/http-common.conf;
+
+#HTTP host for internal services
+server {
+  listen 127.0.0.1:80;
+  listen [::1]:80;
+  server_name localhost;
+  server_tokens off;
+  
+  include /etc/nginx/includes/ds-common.conf;
+  include /etc/nginx/includes/ds-docservice.conf;
+}
+
+## HTTPS host
+server {
+  listen 0.0.0.0:443 ssl;
+  listen [::]:443 ssl; 
+  server_name {{FQDN}};
+  server_tokens off;
+  root /usr/share/nginx/html;
+  add_header Strict-Transport-Security "max-age=31536000" always;
+  add_header X-Content-Type-Options "nosniff" always;
+  add_header Content-Security-Policy "default-src {{FQDN_LIST}}" always;
+  add_header X-Frame-Options "allow-from {{FQDN_LIST}}" always;
+  add_header Expect-CT "max-age=31557600, enforce" always;
+  add_header Referrer-Policy "no-referrer" always;
+  add_header X-Download-Options "noopen" always;
+  add_header X-Robots-Tag "none" always;
+  fastcgi_hide_header X-Powered-By;
+  include /etc/nginx/includes/https-common.conf;
+  include /etc/nginx/includes/ds-*.conf;
+}

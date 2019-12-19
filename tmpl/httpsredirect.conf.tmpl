@@ -1,0 +1,15 @@
+server {
+  listen 0.0.0.0:80;
+  listen [::]:80 default_server;
+  server_name _;
+  server_tokens off;
+  return 404;
+}
+server {
+  listen 0.0.0.0:80;
+  listen [::]:80; 
+  server_name {{FQDN_LIST}};
+  server_tokens off;
+
+  rewrite ^ https://$host$request_uri? permanent;
+}

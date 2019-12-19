@@ -1,0 +1,1 @@
+# nextcloud-onlyoffice-install-script

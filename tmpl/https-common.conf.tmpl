@@ -1,0 +1,24 @@
+ssl_certificate {{SSL_CERTIFICATE_PATH}};
+ssl_certificate_key {{SSL_KEY_PATH}};
+ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+
+# NOTE: disabling TLSv1.2 may break the onlyoffice connector app
+ssl_protocols   TLSv1.2 TLSv1.3;
+ssl_session_cache  builtin:1000  shared:SSL:10m;
+
+ssl_prefer_server_ciphers   on;
+
+## [Optional] If your certficate has OCSP, enable OCSP stapling to reduce the overhead and latency of running SSL.
+## Replace with your ssl_trusted_certificate. For more info see:
+## - https://medium.com/devops-programming/4445f4862461
+## - https://www.ruby-forum.com/topic/4419319
+## - https://www.digitalocean.com/community/tutorials/how-to-configure-ocsp-stapling-on-apache-and-nginx
+ssl_stapling on;
+ssl_stapling_verify on;
+ssl_trusted_certificate {{SSL_CERT_CHAIN_PATH}};
+resolver 208.67.222.222 208.67.222.220 valid=300s; # Can change to your DNS resolver if desired
+resolver_timeout 10s;
+
+## [Optional] Generate a stronger DHE parameter:
+##   sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+ssl_dhparam /etc/ssl/certs/dhparam.pem;
