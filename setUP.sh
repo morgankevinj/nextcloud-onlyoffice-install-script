@@ -8,21 +8,21 @@ declare -r NEXTCLOUD_DB_PWD=$(openssl rand -base64 15)
 declare -r NEXTCLOUD_ADMIN_USER="admin"
 declare -r NEXTCLOUD_ADMIN_PWD=$(openssl rand -base64 15)
 declare -r NEXTCLOUD_FQDN="cloud.example.com" #FIXME: set to fully qualified dns name for nextcloud server
-declare -r NEXTCLOUD_VERSION="17.0.0"
+declare -r NEXTCLOUD_VERSION="23.0.0"
 declare -r NEXTCLOUD_MEMLIMIT="512M"
 declare -r CERT_PATH="/etc/letsencrypt/live/example.com/fullchain.pem" #FIXME:Path to certificate must be set 
 declare -r KEY_PATH="/etc/letsencrypt/live/example.com/privkey.pem" #FIXME:Path to key 
 declare -r CHAIN_PATH="/etc/letsencrypt/live/example.com/chain.pem" #FIXME:Path to certificate with root and intermediate CA chain 
-declare -r PHP_VERSION="7.2"
+declare -r PHP_VERSION="7.4"
 #Install Dependencies 
 apt-get install -yq curl apt-transport-https ca-certificates
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_8.x | bash -
+apt-get install -y nodejs gnupg
 npm install -g npm 
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys CB2DE8E5
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys CB2DE8E5
 apt install -y postgresql redis-server rabbitmq-server nginx-extras nginx build-essential git unzip \
 php-mbstring php-xmlrpc php-soap php-smbclient php-ldap php-redis php-gd php-xml \
-php-intl php-imagick php-ldap php-zip php-curl php-pgsql php-fpm
+php-intl php-imagick php-ldap php-zip php-curl php-pgsql php-fpm sudo
 
 #Set up postgres database
 sudo -i -u postgres psql -c "CREATE DATABASE $ONLYOFFICE_DB_NAME;"
